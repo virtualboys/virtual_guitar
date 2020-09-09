@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea24b5123e0d840f9a2a2520e9cde950, type: 3}
+  m_Name: MajorAndMinor
+  m_EditorClassIdentifier: 
+  GroupName: Major and Minor
+  Chords:
+  - {fileID: 11400000, guid: 820a518623cb545d7b11673d56d44254, type: 2}
+  - {fileID: 11400000, guid: ca5a1cbbf814444fc92265514a87e0e0, type: 2}
+  - {fileID: 11400000, guid: 07b9ae2a817044a1192bb0f20e949ad4, type: 2}
+  - {fileID: 11400000, guid: f2f7ce893e53e48a682384b9d2c12191, type: 2}
+  - {fileID: 11400000, guid: b9ea2213f58c549bfb334f97dc952a0e, type: 2}
+  - {fileID: 11400000, guid: 2fa7f09b60aa14c2082121d03a18f38d, type: 2}
+  - {fileID: 11400000, guid: b7c771ed8d73a4d51a0c200c5c4385c8, type: 2}
+  - {fileID: 11400000, guid: f1778c332038c497a8606657fdc31d55, type: 2}
+  - {fileID: 11400000, guid: e9523d4c498f34c17929c499fc7815b4, type: 2}
