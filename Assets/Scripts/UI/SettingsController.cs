@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityMidi;
 
 public class SettingsController : MonoBehaviour
@@ -12,6 +13,10 @@ public class SettingsController : MonoBehaviour
     [SerializeField] private GameObject _settingsMenu;
     [SerializeField] private TMP_Dropdown _chordGroupDropdown;
     [SerializeField] private TMP_Dropdown _soundBankDropdown;
+    [SerializeField] private Toggle _leftHandedToggle;
+
+    public bool IsLeftHandedEnabled { get { return _leftHandedToggle.isOn; } }
+    public bool IsOpen { get { return _settingsMenu.activeSelf; } }
 
     private ChordGroup[] _chordGroups;
     private SoundBankReference[] _soundBanks;
@@ -54,7 +59,13 @@ public class SettingsController : MonoBehaviour
     }
 
     public void OnSoundBankSelect(int v) {
-        var resource = new StreamingAssetResouce(_soundBanks[v].bankPath);
+        StartCoroutine(LoadBankRoutine(_soundBanks[v].bankPath));
+    }
+
+    private IEnumerator LoadBankRoutine(string bankpath)
+    {
+        var resource = new StreamingAssetResouce(bankpath);
+        yield return resource.ReadResourceRoutine();
         StringsManager.Singleton.MidiPlayer.LoadBank(new AudioSynthesis.Bank.PatchBank(resource));
         Close();
     }

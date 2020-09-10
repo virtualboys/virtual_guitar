@@ -19,7 +19,6 @@ namespace UnityMidi
         [SerializeField] int channel = 1;
         [SerializeField] int sampleRate = 44100;
         [SerializeField] int bufferSize = 1024;
-        [SerializeField] ChordData chord;
 
 
         PatchBank bank;
@@ -37,6 +36,8 @@ namespace UnityMidi
         public PatchBank Bank { get { return bank; } }
 
         public MidiFile MidiFile { get { return midi; } }
+
+        private Coroutine _loadBankRoutine;
 
         public void Awake()
         {
@@ -111,25 +112,7 @@ namespace UnityMidi
 
         private void Update()
         {
-            if (Input.GetButtonDown("Fire1")) {
-                int chan = 0;
-                int[] notes = chord.MIDINotes;
-                foreach(int note in notes) 
-                {
-                    synthesizer.NoteOn(channel, note, 100);
 
-                }
-            }
-
-            if (Input.GetButtonUp("Fire1")) {
-                int[] notes = chord.MIDINotes;
-                int chan = 0;
-                foreach (int note in notes)
-                {
-                    synthesizer.NoteOff(channel, note);
-
-                }
-            }
         }
     }
 }

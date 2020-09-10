@@ -5,6 +5,7 @@ using AudioSynthesis.Bank.Patches;
 using AudioSynthesis.Sf2;
 using AudioSynthesis.Util;
 using AudioSynthesis.Util.Riff;
+using System.Collections;
 
 namespace AudioSynthesis.Bank
 {
@@ -13,6 +14,7 @@ namespace AudioSynthesis.Bank
         public const float BankVersion = 1.000f;
         public const int DrumBank = 128;
         public const int BankSize = 128;
+        public bool isLoaded;
         private static Dictionary<string, Type> patchTypes;
         private Dictionary<int, Patch[]> bank;
         private AssetManager assets;
@@ -48,6 +50,7 @@ namespace AudioSynthesis.Bank
         {
             get { return bankName; }
         }
+
         public string Comments
         {
             get { return comment; }
@@ -60,6 +63,7 @@ namespace AudioSynthesis.Bank
             bankName = string.Empty;
             comment = string.Empty;
         }
+
         public PatchBank(IResource bankFile)
         {
             bank = new Dictionary<int, Patch[]>();
@@ -68,6 +72,7 @@ namespace AudioSynthesis.Bank
             comment = string.Empty;
             LoadBank(bankFile);
         }
+
         public void LoadBank(IResource bankFile)
         {
             if (!bankFile.ReadAllowed())

@@ -6,12 +6,14 @@ using UnityEngine.UI;
 using UnityMidi;
 
 public class StringController : MonoBehaviour {
-    [SerializeField] private int _stringInd;
+
+    [SerializeField] private int _stringIndFromTop;
     [SerializeField] private Color _playedColor;
     [SerializeField] private Color _mutedColor;
     [SerializeField] private Image _image;
 
-    public bool IsMuted { get { return StringsManager.Singleton.SelectedChord.IsMuted(_stringInd); } }
+    public int StringInd { get { return (SettingsController.Instance.IsLeftHandedEnabled) ? 5 - _stringIndFromTop : _stringIndFromTop; } }
+    public bool IsMuted { get { return StringsManager.Singleton.SelectedChord.IsMuted(StringInd); } }
 
     private RectTransform _rectTransform;
     private MidiPlayer _midiPlayer;
@@ -20,6 +22,7 @@ public class StringController : MonoBehaviour {
     private Vector3 _startPosScreen;
     private Vector3 _endPosScreen;
     private Color _defaultColor;
+    private int _lastPlayedNote;
 
     private Coroutine _playNoteRoutine;
 
@@ -45,6 +48,7 @@ public class StringController : MonoBehaviour {
     public void Play() {
         if(_playNoteRoutine != null) {
             StopCoroutine(_playNoteRoutine);
+            _midiPlayer.EndNote(_lastPlayedNote);
         }
 
         _playNoteRoutine = StartCoroutine(PlayNoteRoutine());
@@ -53,15 +57,16 @@ public class StringController : MonoBehaviour {
     private IEnumerator PlayNoteRoutine() {
         ChordData chord = StringsManager.Singleton.SelectedChord;
 
-        if (chord.IsMuted(_stringInd)) {
+        if (chord.IsMuted(StringInd)) {
             _image.color = _mutedColor;
-            _midiPlayer.EndNoteImmediately(chord.GetNoteForString(_stringInd));
+            _midiPlayer.EndNote(_lastPlayedNote);
             yield return new WaitForSeconds(_noteLength);
         } else {
             _image.color = _playedColor;
-            _midiPlayer.StartNote(chord.GetNoteForString(_stringInd), _volume);
+            _lastPlayedNote = chord.GetNoteForString(StringInd);
+            _midiPlayer.StartNote(_lastPlayedNote, _volume);
             yield return new WaitForSeconds(_noteLength);
-            _midiPlayer.EndNote(chord.GetNoteForString(_stringInd));
+            _midiPlayer.EndNote(_lastPlayedNote);
         }
 
         _image.color = _defaultColor;
@@ -69,7 +74,6 @@ public class StringController : MonoBehaviour {
     }
 
     public bool IsOverString(Vector2 pos) {
-        //Debug.Log("is over string: " + RectTransformUtility.RectangleContainsScreenPoint(_rectTransform, pos, Camera.main) + " pos: " + pos);
         return RectTransformUtility.RectangleContainsScreenPoint(_rectTransform, pos, Camera.main);
     }
 

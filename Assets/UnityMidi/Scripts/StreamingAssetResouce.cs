@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.IO;
 using AudioSynthesis;
+using System.Collections;
+using UnityEngine.Networking;
 
 namespace UnityMidi
 {
@@ -9,9 +11,12 @@ namespace UnityMidi
     {
         [SerializeField] string streamingAssetPath;
 
+        private byte[] _results;
+
         public StreamingAssetResouce() { }
         public StreamingAssetResouce(string path) {
             streamingAssetPath = path;
+
         }
 
         public bool ReadAllowed()
@@ -36,15 +41,42 @@ namespace UnityMidi
 
         public Stream OpenResourceForRead()
         {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            return new MemoryStream(_results);
+#else
             return File.OpenRead(Path.Combine(Application.streamingAssetsPath, streamingAssetPath));
+#endif
         }
 
-        public Stream OpenResourceForWrite()
+        public IEnumerator ReadResourceRoutine()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            string path = Path.Combine(Application.streamingAssetsPath, streamingAssetPath);
+            Debug.Log("Reading resource with webreq from path: " + path);
+            using (UnityWebRequest www = UnityWebRequest.Get(path))
+            {
+                yield return www.SendWebRequest();
+
+                if (www.isNetworkError || www.isHttpError)
+                {
+                    Debug.LogError(www.error);
+                }
+                else
+                {
+                    _results = www.downloadHandler.data;
+                }
+            }
+
+#endif
+            yield break;
+        }
+
+        Stream IResource.OpenResourceForWrite()
         {
             throw new System.NotImplementedException();
         }
 
-        public void DeleteResource()
+        void IResource.DeleteResource()
         {
             throw new System.NotImplementedException();
         }

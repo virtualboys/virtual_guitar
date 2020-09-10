@@ -1,5 +1,6 @@
 ﻿namespace AudioSynthesis
 {
+    using System.Collections;
     using System.IO;
 
     public interface IResource

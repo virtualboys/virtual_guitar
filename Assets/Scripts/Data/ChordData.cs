@@ -31,7 +31,13 @@ public class ChordData : ScriptableObject
         if(_frets[stringInd] == -1) {
             return 0;
         }
-        return BASE_NOTES[stringInd] + _frets[stringInd];
+
+        int note = BASE_NOTES[stringInd] + _frets[stringInd];
+#if UNITY_ANDROID && !UNITY_EDITOR
+        // android is an octave lower for some reason
+        note += 12; 
+#endif
+        return note;
     }
 
     private int[] GetMIDINotes() {

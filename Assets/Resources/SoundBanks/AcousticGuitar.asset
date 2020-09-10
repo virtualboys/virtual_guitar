@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: AcousticGuitar
   m_EditorClassIdentifier: 
   bankName: Acoustic Guitar
-  bankPath: CSharpSynth/FS_Seagull_Steel_String_Acoustic_Guitar.sf2
+  bankPath: SoundFonts/Acoustic Guitars JNv2.4.sf2

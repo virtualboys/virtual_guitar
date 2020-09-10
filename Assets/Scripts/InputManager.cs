@@ -12,6 +12,16 @@ public class InputManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if(SettingsController.Instance.IsOpen)
+        {
+            if(_strum != null)
+            {
+                _strum.EndStrum();
+                StringsManager.Singleton.DeselectFret();
+                _strum = null;
+            }
+            return;
+        }
         if (_strum != null) {
             _strum.Update(Input.mousePosition);
         }
@@ -19,9 +29,12 @@ public class InputManager : MonoBehaviour {
             StringsManager.Singleton.SelectFretAtPosition(Input.mousePosition);
             _strum = new Strum(Input.mousePosition);
         } else if(Input.GetButtonUp("Fire1")) {
-            _strum.EndStrum();
-            StringsManager.Singleton.DeselectFret();
-            _strum = null;
+            if(_strum != null)
+            {
+                _strum.EndStrum();
+                StringsManager.Singleton.DeselectFret();
+                _strum = null;
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ public class Strum
                 // dont wait for release when muting
                 if(s.IsMuted) {
                     s.Play();
+                    _lastPlayed = s;
                 }
                 break;
             }
